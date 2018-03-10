@@ -4,7 +4,7 @@ namespace Tests
     using Extensions;
     using Xunit;
 
-    public class Test
+    public class JsonTest
     {
         [Fact]
         public void Compare_Two_Json_Objects_That_Are_Differnt()
