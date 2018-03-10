@@ -30,17 +30,17 @@ namespace Extensions
 
                             if ((typeof(int) == listType) || (typeof(string) == listType))
                             {
-                                csv = csv.AppendFormat("{0}{1}", property.Name, separator);
+                                csv = csv.AppendFormat($"{property.Name}{separator}");
                             }
                             else
                             {
                                 var sub = _list[0].GetType().GetProperties();
-                                csv = csv.AppendFormat("{0}{1}", sub[0].Name, separator);
+                                csv = csv.AppendFormat($"{sub[0].Name}{separator}");
                             }
                         }
                         else
                         {
-                            csv = csv.AppendFormat("{0}{1}", property.Name, separator);
+                            csv = csv.AppendFormat($"{property.Name}{separator}");
                         }
                     }
                     break;
@@ -63,7 +63,7 @@ namespace Extensions
                             if ((typeof(int) == listType) || (typeof(string) == listType))
                             {
                                 var selections = propValue as IList;
-                                csv = csv.AppendFormat("{0}{1}", BuildString(selections), separator);
+                                csv = csv.AppendFormat($"{BuildString(selections)}{separator}");
                             }
                             else
                             {
@@ -74,13 +74,13 @@ namespace Extensions
                                     object nestedProp = GetPropValue(_list[0], sub[0].Name);
 
                                     var nestedselections = nestedProp as IList;
-                                    csv = csv.AppendFormat("{0}{1}", BuildString(nestedselections), separator);
+                                    csv = csv.AppendFormat($"{BuildString(nestedselections)}{separator}");
                                 }
                             }
                         }
                         else
                         {
-                            csv = csv.AppendFormat("{0}{1}", GetPropValue(item, property.Name), separator);
+                            csv = csv.AppendFormat($"{property.Name}{separator}");
                         }
                     }
                 }
