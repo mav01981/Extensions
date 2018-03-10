@@ -14,11 +14,9 @@ namespace Extensions
 
             if (list != null)
             {
-                PropertyInfo[] properties = typeof(T).GetProperties();
-
                 foreach (var item in list)
                 {
-                    foreach (var property in properties)
+                    foreach (var property in typeof(T).GetProperties())
                     {
                         if (typeof(IEnumerable).IsAssignableFrom(property.PropertyType))
                         {
