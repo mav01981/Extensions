@@ -53,7 +53,7 @@
             people.Add(model);
             people.Add(model);
 
-            Assert.Equal("SimpleTypeProperty,\r\n1,2,1,2,", people.ToCSV(","));
+            Assert.Equal("SimpleTypeProperty,\r\n1 |2 |,\r\n1 |2 |,\r\n", people.ToCSV(","));
         }
 
         [Fact]
@@ -75,9 +75,7 @@
             people.Add(model);
             people.Add(model);
 
-
-            string a = people.ToCSV(",");
-            Assert.Equal("SimpleTypeProperty,\r\n1,2,1,2,", people.ToCSV(","));
+            Assert.Equal("subClass,\r\n1 |2 |,\r\n1 |2 |,\r\n", people.ToCSV(","));
         }
 
         [Fact]
@@ -99,7 +97,7 @@
             people.Add(model);
             people.Add(model);
 
-            Assert.Equal("SimpleTypeProperty,\r\n1,2,1,2,", people.ToCSV(","));
+            Assert.Equal("subClass,\r\n1 |2 |,\r\n1 |2 |,\r\n", people.ToCSV(","));
         }
     }
 }

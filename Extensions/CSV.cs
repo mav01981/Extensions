@@ -6,82 +6,99 @@ using System.Text;
 
 namespace Extensions
 {
-    public static class CSVExtension
+    public static class CSVExtensions
     {
-        public static string ToCSV<T>(this IEnumerable<T> list, string separator)
+        public static string ToCSV<T>(this IEnumerable<T> rows, string separator)
         {
             StringBuilder csv = new StringBuilder();
 
-            if (list != null)
+            try
             {
-                foreach (var item in list)
+                if (rows != null)
                 {
-                    foreach (var property in typeof(T).GetProperties())
+                    foreach (var header in rows)
                     {
-                        if (typeof(IEnumerable).IsAssignableFrom(property.PropertyType))
+                        var properties = header.GetType().GetProperties();
+
+                        foreach (var prop in properties)
                         {
-                            object propValue = property.GetValue(item, null);
-
-                            var _list = propValue as IList;
-
-                            Type listType = (_list[0].GetType());
-
-                            if ((typeof(int) == listType) || (typeof(string) == listType))
+                            if (prop.PropertyType == typeof(string) || prop.PropertyType == typeof(int))
                             {
-                                csv = csv.AppendFormat($"{property.Name}{separator}");
+                                csv = csv.AppendFormat($"{prop.Name}{separator}");
                             }
-                            else
+                            else if (typeof(IEnumerable).IsAssignableFrom(prop.PropertyType))
                             {
-                                var sub = _list[0].GetType().GetProperties();
-                                csv = csv.AppendFormat($"{sub[0].Name}{separator}");
+                                csv = csv.AppendFormat($"{prop.Name}{separator}");
                             }
                         }
-                        else
-                        {
-                            csv = csv.AppendFormat($"{property.Name}{separator}");
-                        }
+                        break;
                     }
-                    break;
-                }
+                    csv.AppendLine();
 
-                csv.AppendLine();
-
-                foreach (var item in list)
-                {
-                    foreach (var property in item.GetType().GetProperties())
+                    foreach (var row in rows)
                     {
-                        if (typeof(IEnumerable).IsAssignableFrom(property.PropertyType))
+                        var properties = row.GetType().GetProperties();
+
+                        foreach (var prop in properties)
                         {
-                            object propValue = property.GetValue(item, null);
+                            object value = GetPropValue(row, prop.Name);
 
-                            var _list = propValue as IList;
-
-                            Type listType = (_list[0].GetType());
-
-                            if ((typeof(int) == listType) || (typeof(string) == listType))
+                            if (value == null)
                             {
-                                var selections = propValue as IList;
-                                csv = csv.AppendFormat($"{BuildString(selections)}{separator}");
+                                csv = csv.AppendFormat($"#{separator}");
                             }
-                            else
+                            else if (value.GetType() == typeof(string) || value.GetType() == typeof(int))
                             {
-                                var sub = _list[0].GetType().GetProperties();
+                                csv = csv.AppendFormat($"{value}{separator}");
+                            }
+                            else if (typeof(IEnumerable).IsAssignableFrom(value.GetType()))
+                            {
 
-                                if (sub.Length == 1)
+                                string split = string.Empty;
+                                var listOfItems = value as IList;
+                                foreach (var t in Flatten(listOfItems))
                                 {
-                                    object nestedProp = GetPropValue(_list[0], sub[0].Name);
+                                    Type itemType = value.GetType().GetGenericArguments()[0];
 
-                                    var nestedselections = nestedProp as IList;
-                                    csv = csv.AppendFormat($"{BuildString(nestedselections)}{separator}");
+                                    if (itemType == typeof(int))
+                                    {
+                                        split = split + $"{t} |";
+                                    }
+                                    else
+                                    {
+                                        var items = t.GetType().GetProperties();
+
+                                        foreach (var i in items)
+                                        {
+                                            object val = GetPropValue(t, i.Name);
+
+                                            var isList = val as IList;
+
+                                            if (isList == null)
+                                            {
+                                                split = split + $"{val} |";
+                                            }
+                                            else
+                                            {
+                                                foreach (var v in isList)
+                                                {
+                                                    split = split + $"{v} |";
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
+                                csv = csv.AppendFormat($"{split}{separator}");
                             }
                         }
-                        else
-                        {
-                            csv = csv.AppendFormat($"{property.Name}{separator}");
-                        }
+                        csv.AppendLine();
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
             }
             return csv.ToString();
         }
@@ -91,14 +108,34 @@ namespace Extensions
             return src.GetType().GetProperty(propName).GetValue(src, null);
         }
 
+        static IEnumerable Flatten(IList enumerable)
+        {
+            foreach (object element in enumerable)
+            {
+                IList candidate = element as IList;
+                if (candidate != null)
+                {
+                    foreach (object nested in Flatten(candidate))
+                    {
+                        yield return nested;
+                    }
+                }
+                else
+                {
+                    yield return element;
+                }
+            }
+        }
+
         internal static string BuildString(IList list)
         {
             string collection = string.Empty;
             foreach (var select in list)
             {
-                collection = collection.Length == 0 ? collection + select + "," : collection + select + ",";
+                collection = collection.Length == 0 ? collection + select + " " : collection + select + " ";
             }
-            collection = collection.Remove(collection.Length - 1, 1);
+            if (collection.Length >= 1)
+                collection = collection.Remove(collection.Length - 1, 1);
 
             return collection;
         }
