@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Text;
 
 namespace Extensions
@@ -53,9 +52,10 @@ namespace Extensions
                             }
                             else if (typeof(IEnumerable).IsAssignableFrom(value.GetType()))
                             {
-
                                 string split = string.Empty;
+
                                 var listOfItems = value as IList;
+
                                 foreach (var t in Flatten(listOfItems))
                                 {
                                     Type itemType = value.GetType().GetGenericArguments()[0];
@@ -97,7 +97,6 @@ namespace Extensions
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
             return csv.ToString();
@@ -108,7 +107,7 @@ namespace Extensions
             return src.GetType().GetProperty(propName).GetValue(src, null);
         }
 
-        static IEnumerable Flatten(IList enumerable)
+        internal static IEnumerable Flatten(IList enumerable)
         {
             foreach (object element in enumerable)
             {
@@ -125,19 +124,6 @@ namespace Extensions
                     yield return element;
                 }
             }
-        }
-
-        internal static string BuildString(IList list)
-        {
-            string collection = string.Empty;
-            foreach (var select in list)
-            {
-                collection = collection.Length == 0 ? collection + select + " " : collection + select + " ";
-            }
-            if (collection.Length >= 1)
-                collection = collection.Remove(collection.Length - 1, 1);
-
-            return collection;
         }
     }
 }
