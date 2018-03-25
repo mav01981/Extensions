@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-namespace Extensions
+﻿namespace Extensions
 {
     using System.IO;
     using System.Xml;
