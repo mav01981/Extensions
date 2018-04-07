@@ -4,7 +4,7 @@ namespace Extensions
 {
     public static class EnumsExtensions
     {
-        public static bool Has<T>(this Enum type, T value) 
+        public static bool Has<T>(this Enum type, T value)
         {
             try
             {
