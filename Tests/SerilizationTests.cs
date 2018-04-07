@@ -12,7 +12,7 @@
     public class SerilizationTests
     {
         //[the name of the tested feature]_[expected input / tested state]_[expected behavior].
-        //registerNewUserAccount_ExistingEmailAddressGiven_ShouldShowErrorMessage().
+        //registerNewUserAccount_ExistingEmailAddressGiven_ShouldShowErrorMessage(). 
 
         [Fact]
         public void Copy_Model_PointToSameMemoryAddress()
