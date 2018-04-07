@@ -3,12 +3,18 @@
     using Extensions;
     using Xunit;
 
-
     public class Person
     {
-        public string Name { get; set; }
-        public int Age { get; set; }
+        public string Name;
+        public int Age;
+        public Address Address; //Reference Type
     }
+
+    public class Address
+    {
+        public string StreetName;
+    }
+
     public class SerilizationTests
     {
         //[the name of the tested feature]_[expected input / tested state]_[expected behavior].
@@ -20,7 +26,11 @@
             var model = new Person()
             {
                 Name = "Jon Doe",
-                Age = 21
+                Age = 21,
+                Address = new Address()
+                {
+                    StreetName = "Coronation Street"
+                }
             };
 
             var copy = model;
@@ -34,12 +44,18 @@
             var model = new Person()
             {
                 Name = "Jon Doe",
-                Age = 21
+                Age = 21,
+                Address = new Address()
+                {
+                    StreetName = "Coronation Street"
+                }
             };
 
             var copy = model.DeepCopy<Person>();
 
-            Assert.False(model.Equals(copy));
+            model.Address.StreetName = "Penny Lane";
+
+            Assert.NotEqual(model.Address.StreetName, copy.Address.StreetName);
         }
 
         [Fact]
@@ -48,12 +64,19 @@
             var model = new Person()
             {
                 Name = "Jon Doe",
-                Age = 21
+                Age = 21,
+                Address = new Address()
+                {
+                    StreetName = "Coronation Street"
+                }
             };
 
             var copy = model.ShallowCopy<Person>();
 
-            Assert.False(model.Equals(copy));
+            model.Address.StreetName = "Penny Lane";
+
+            Assert.Equal(model.Address.StreetName, copy.Address.StreetName);
+
         }
     }
 }
