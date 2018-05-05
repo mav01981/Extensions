@@ -92,5 +92,28 @@ namespace Tests
 
             Assert.True(dictionary.Count == 11);
         }
+
+        [Fact]
+        public void Convert_JsonString_To_Datable()
+        {
+            string json = new Car()
+            {
+                //Ids = new int[] { 1, 2, 3 },
+                Name = "Nissan Primera 1.8 Flare 5dr",
+                Colour = "Red",
+                Engine = new Engine()
+                {
+                    EngineSize = "1.8L",
+                    Measure = new Type()
+                    {
+                        Name = "New measure Type"
+                    }
+                }
+            }.ObjectToJson();
+
+            var dataTable = json.();
+
+           // Assert.True(dataTable.Rows.Count == 11);
+        }
     }
 }

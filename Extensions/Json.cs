@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 
 namespace Extensions
@@ -78,6 +79,7 @@ namespace Extensions
             return output;
         }
 
+
         static void JsonToDictionary(Dictionary<string, object> dic, string SupKey, Dictionary<string, string> output)
         {
             foreach (KeyValuePair<string, object> entry in dic)
@@ -96,14 +98,14 @@ namespace Extensions
                             if (item is JProperty)
                             {
                                 var property = item.ToString().Split(':');
-                                var path = entry.Key + "/" + property[0];
+                                var path = entry.Key + "|" + property[0];
 
                                 int record = output
                                     .Where(kvp => kvp.Key.Contains(path)).Count();
 
                                 if (record > 0)
                                 {
-                                    path = record + @"/" + path;
+                                    path = record + @"|" + path;
                                 }
 
                                 output.Add(path, property[1]);
@@ -123,10 +125,71 @@ namespace Extensions
                 }
                 else
                 {
-                    output.Add(entry.Key, entry.Value.ToString());
+
+                    var item = SupKey + " " + entry.Key;
+                    var property = item.ToString().Split(':');
+                    var path = entry.Key + "/" + property[0];
+
+                    int record = output
+                        .Where(kvp => kvp.Key.Contains(SupKey + " " + entry.Key)).Count();
+
+                    output.Add(SupKey + " " + entry.Key + ":" + (record + 1).ToString(), entry.Value == null ?"": entry.Value.ToString());
+
                 }
             }
+
         }
 
+        /// <summary>
+        /// Convert Json Object to to Datable
+        /// </summary>
+        /// <param name="jsonString"></param>
+        /// <returns></returns>
+        public static DataTable ConvertJsonToDatatable(this string json)
+        {
+            var jsonLinq = JObject.Parse(json);
+
+            var linqArray = jsonLinq.Descendants().Where(x => x is JArray).First();
+            var jsonArray = new JArray();
+            foreach (JObject row in linqArray.Children<JObject>())
+            {
+                var createRow = new JObject();
+                foreach (JProperty column in row.Properties())
+                {
+                    if (column.Value is JValue)
+                    {
+                        createRow.Add(column.Name, column.Value);
+                        jsonArray.Add(createRow);
+                    }
+                    else if (column.Value is JArray)
+                    {
+                        string output = string.Empty;
+                        int i = 1;
+                        foreach (JObject value in column.Value as JArray)
+                        {
+                            foreach (var val in value.Properties())
+                            {
+                                createRow.Add(val.Name + i, val.Value);
+                                jsonArray.Add(createRow);
+                            }
+                            i++;
+                        }
+                    }
+                    else if (column.Value is IList)
+                    {
+                        foreach (JObject value in column as IEnumerable)
+                        {
+                            foreach (var val in value.Properties())
+                            {
+                                createRow.Add(val.Name, val.Value);
+                                jsonArray.Add(createRow);
+                            }
+                        }
+                    }
+                }
+            }
+            return JsonConvert.DeserializeObject<DataTable>(jsonArray.ToString());
+        }
     }
 }
+
