@@ -61,7 +61,7 @@
 
             var output = vehicle.ObjectToString<Car>();
 
-            Assert.Equal("Name:Jon Doe Age:34 Address:Tests.Address ", output);
+            Assert.Equal("Name:Nissan Primera 1.8 Flare 5dr Colour:Red |Tests.Car|EngineSize:1.8L |Tests.Engine|Name:New measure Type Ids:123", output);
         }
 
         [Fact]
@@ -130,26 +130,26 @@
 
             var output = lots.ObjectToString<CarsLots>();
 
-            Assert.Equal("Name:Jon Doe Age:34 Address:Tests.Address ", output);
+            Assert.Equal("|Tests.Car|Name:Nissan Primera 1.8 Flare 5dr Colour:Red |Tests.Car|EngineSize:1.8L |Tests.Engine|Name:New measure Type |Tests.InsuredDriver|FullName:Jonathan Smart EmailAddress:mail@mailaddrees.com Ids:123|Tests.InsuredDriver|FullName:Jonathan Smart EmailAddress:mail@mailaddrees.com |Tests.InsuredDriver|FullName:Jonathan Smart EmailAddress:mail@mailaddrees.com |Tests.Car|Name:Nissan Primera 1.8 Flare 5dr Colour:Red |Tests.Car|EngineSize:1.8L |Tests.Engine|Name:New measure Type Ids:123", output);
         }
 
-        [Fact]
-        public void Flatten_ModelWithArray_ToString()
-        {
-            var array = new CarsArray()
-            {
-                Lots = new Car[]
-                {
-                  new Car()
-                  {
+        //[Fact]
+        //public void Flatten_ModelWithArray_ToString()
+        //{
+        //    var array = new CarsArray()
+        //    {
+        //        Lots = new Car[]
+        //        {
+        //          new Car()
+        //          {
 
-                  }
-              }
-            };
+        //          }
+        //      }
+        //    };
 
-            //var output = lots.ObjectToString<CarsLots>();
+        //    //var output = lots.ObjectToString<CarsLots>();
 
-            //Assert.Equal("Name:Jon Doe Age:34 Address:Tests.Address ", output);
-        }
+        //    //Assert.Equal("Name:Jon Doe Age:34 Address:Tests.Address ", output);
+        //}
     }
 }

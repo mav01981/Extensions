@@ -98,7 +98,7 @@ namespace Tests
         {
             string json = new Car()
             {
-                //Ids = new int[] { 1, 2, 3 },
+                Ids = new int[] { 1, 2, 3 },
                 Name = "Nissan Primera 1.8 Flare 5dr",
                 Colour = "Red",
                 Engine = new Engine()
@@ -111,9 +111,9 @@ namespace Tests
                 }
             }.ObjectToJson();
 
-            var dataTable = json.();
+            var dataTable = json.ConvertJsonToDatatable();
 
-           // Assert.True(dataTable.Rows.Count == 11);
+            Assert.True(dataTable.Rows.Count == 11);
         }
     }
 }
