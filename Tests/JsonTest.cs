@@ -1,6 +1,8 @@
 namespace Tests
 {
+    using System;
     using System.Collections.Generic;
+    using System.Text;
     using Extensions;
     using Xunit;
 
@@ -114,6 +116,53 @@ namespace Tests
             var dataTable = json.ConvertJsonToDatatable();
 
             Assert.True(dataTable.Rows.Count == 11);
+        }
+
+
+        [Fact]
+        public void Compress_Json_String()
+        {
+            string json = new Car()
+            {
+                Ids = new int[] { 1, 2, 3 },
+                Name = "Nissan Primera 1.8 Flare 5dr",
+                Colour = "Red",
+                Engine = new Engine()
+                {
+                    EngineSize = "1.8L",
+                    Measure = new Type()
+                    {
+                        Name = "New measure Type"
+                    }
+                }
+            }.ObjectToJson();
+
+            var compressedString = json.Compress();
+
+            Assert.True((compressedString.Length * sizeof(byte)) < ASCIIEncoding.Unicode.GetByteCount(json));
+        }
+
+        [Fact]
+        public void Unzip_Json_String()
+        {
+            string json = new Car()
+            {
+                Ids = new int[] { 1, 2, 3 },
+                Name = "Nissan Primera 1.8 Flare 5dr",
+                Colour = "Red",
+                Engine = new Engine()
+                {
+                    EngineSize = "1.8L",
+                    Measure = new Type()
+                    {
+                        Name = "New measure Type"
+                    }
+                }
+            }.ObjectToJson();
+
+            var compressedString = json.Compress();
+
+            Assert.Equal(json, Convert.ToBase64String(compressedString).Unzip());
         }
     }
 }

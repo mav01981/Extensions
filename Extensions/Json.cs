@@ -4,7 +4,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
+using System.IO.Compression;
 using System.Linq;
+using System.Text;
 
 namespace Extensions
 {
@@ -133,7 +136,7 @@ namespace Extensions
                     int record = output
                         .Where(kvp => kvp.Key.Contains(SupKey + " " + entry.Key)).Count();
 
-                    output.Add(SupKey + " " + entry.Key + ":" + (record + 1).ToString(), entry.Value == null ?"": entry.Value.ToString());
+                    output.Add(SupKey + " " + entry.Key + ":" + (record + 1).ToString(), entry.Value == null ? "" : entry.Value.ToString());
 
                 }
             }
@@ -154,6 +157,7 @@ namespace Extensions
             foreach (JObject row in linqArray.Children<JObject>())
             {
                 var createRow = new JObject();
+
                 foreach (JProperty column in row.Properties())
                 {
                     if (column.Value is JValue)
@@ -189,6 +193,33 @@ namespace Extensions
                 }
             }
             return JsonConvert.DeserializeObject<DataTable>(jsonArray.ToString());
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="compressedJson"></param>
+        /// <returns></returns>
+        public static string Unzip(this string compressedJson)
+        {
+            using (var inputStream = new MemoryStream(Convert.FromBase64String(compressedJson)))
+            using (var gZipStream = new GZipStream(inputStream, CompressionMode.Decompress))
+            using (var streamReader = new StreamReader(gZipStream))
+            {
+                return streamReader.ReadToEnd();
+            }
+        }
+
+        public static byte[] Compress(this string json)
+        {
+            byte[] inputBytes = Encoding.UTF8.GetBytes(json);
+
+            using (var outputStream = new MemoryStream())
+            {
+                using (var gZipStream = new GZipStream(outputStream, CompressionMode.Compress))
+                    gZipStream.Write(inputBytes, 0, inputBytes.Length);
+
+                return outputStream.ToArray();
+            }
         }
     }
 }
