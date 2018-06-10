@@ -77,7 +77,7 @@ namespace Extensions
                 {
                     using (StreamWriter swEncrypt = new StreamWriter(csEncrypt))
                     {
-                        swEncrypt.Write("Hello World");
+                        swEncrypt.Write(input);
                     }
                     encrypted = msEncrypt.ToArray();
 
