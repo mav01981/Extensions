@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Linq;
 
 namespace Extensions
 {
@@ -97,6 +98,16 @@ namespace Extensions
             {
                 yield break;
             }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="object"></param>
+        /// <returns></returns>
+        public static string[] PropertiesToStringArray<T>(this T @object)
+        {
+            return @object.GetType().GetProperties().Select(s => s.GetValue(@object).ToString()).ToArray();
         }
     }
 }

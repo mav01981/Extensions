@@ -133,23 +133,25 @@
             Assert.Equal("|Tests.Car|Name:Nissan Primera 1.8 Flare 5dr Colour:Red |Tests.Car|EngineSize:1.8L |Tests.Engine|Name:New measure Type |Tests.InsuredDriver|FullName:Jonathan Smart EmailAddress:mail@mailaddrees.com Ids:123|Tests.InsuredDriver|FullName:Jonathan Smart EmailAddress:mail@mailaddrees.com |Tests.InsuredDriver|FullName:Jonathan Smart EmailAddress:mail@mailaddrees.com |Tests.Car|Name:Nissan Primera 1.8 Flare 5dr Colour:Red |Tests.Car|EngineSize:1.8L |Tests.Engine|Name:New measure Type Ids:123", output);
         }
 
-        //[Fact]
-        //public void Flatten_ModelWithArray_ToString()
-        //{
-        //    var array = new CarsArray()
-        //    {
-        //        Lots = new Car[]
-        //        {
-        //          new Car()
-        //          {
+        [Fact]
+        public void Class_To_String_Array()
+        {
+            var driver = new InsuredDriver() { EmailAddress = "jonDoe@mail.com", FullName = "Jon Doe" };
+            var output = driver.PropertiesToStringArray();
 
-        //          }
-        //      }
-        //    };
+            Assert.Equal(2, output.Length);
+        }
 
-        //    //var output = lots.ObjectToString<CarsLots>();
+        [Fact]
+        public void Class_To_String_IEnumerable()
+        {
+            var driver = new InsuredDriver() { EmailAddress = "jonDoe@mail.com", FullName = "Jon Doe" };
+            var output = driver.ClassToIEnumerable();
 
-        //    //Assert.Equal("Name:Jon Doe Age:34 Address:Tests.Address ", output);
-        //}
+            Assert.Equal("", output.)
+
+
+        }
+
     }
 }
