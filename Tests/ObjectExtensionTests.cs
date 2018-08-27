@@ -148,7 +148,7 @@
             var driver = new InsuredDriver() { EmailAddress = "jonDoe@mail.com", FullName = "Jon Doe" };
             var output = driver.ClassToIEnumerable();
 
-            Assert.Equal("", output.)
+            //Assert.Equal("", output.)
 
 
         }

@@ -1,11 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Security.Cryptography;
-using System.Text;
-
-namespace Extensions
+﻿namespace Extensions
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Security.Cryptography;
+    using System.Text;
+
+
     public static class Cryptography
     {
         public class HashWithSaltResult

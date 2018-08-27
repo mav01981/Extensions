@@ -1,8 +1,8 @@
-﻿using System;
-using System.IO;
-
-namespace Extensions
+﻿namespace Extensions
 {
+    using System;
+    using System.IO;
+
     public static class StringExtension
     {
         public static string RemoveLastCharacter(this String @string)
@@ -24,12 +24,19 @@ namespace Extensions
 
         public static MemoryStream ToStream(this string str)
         {
-            MemoryStream stream = new MemoryStream();
-            StreamWriter writer = new StreamWriter(stream);
-            writer.Write(str);
-            writer.Flush();
-            stream.Position = 0;
-            return stream;
+            using (MemoryStream stream = new MemoryStream())
+            {
+                using (StreamWriter writer = new StreamWriter(stream))
+                {
+                    writer.Write(str);
+                    writer.Flush();
+                }
+
+                stream.Position = 0;
+
+                return stream;
+            };
+
         }
     }
 }

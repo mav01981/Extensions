@@ -3,13 +3,14 @@
     using Xunit;
     using Extensions;
 
-    enum Job
+    public enum Job
     {
         PoliceMan,
         Salesman,
         Teacher,
         Gardener
     }
+
     public class EnumTests
     {
         [Fact]
