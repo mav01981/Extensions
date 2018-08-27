@@ -1,31 +1,12 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Data;
-using System.Linq;
 using System.Text;
 
 namespace Extensions
 {
     public static class CSVExtensions
     {
-        public static string ToCSV(this DataTable table)
-        {
-            StringBuilder sb = new StringBuilder();
-
-            IEnumerable<string> columnNames = table.Columns.Cast<DataColumn>().
-                                              Select(column => column.ColumnName);
-            sb.AppendLine(string.Join(",", columnNames));
-
-            foreach (DataRow row in table.Rows)
-            {
-                IEnumerable<string> fields = row.ItemArray.Select(field => field.ToString());
-                sb.AppendLine(string.Join(",", fields));
-            }
-
-            return sb.ToString();
-        }
-
         public static string ToCSV<T>(this IEnumerable<T> rows, string separator)
         {
             StringBuilder csv = new StringBuilder();

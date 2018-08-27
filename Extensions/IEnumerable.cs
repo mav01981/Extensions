@@ -64,6 +64,25 @@
             return list;
         }
 
+        public static Dictionary<TKey, List<TValue>> ToDictionary<TKey, TValue>(this IEnumerable<IGrouping<TKey, TValue>> groupings)
+        {
+            return groupings.ToDictionary(group => group.Key, group => group.ToList());
+        }
+
+        public static IEnumerable<T> RemoveDuplicates<T>(this ICollection<T> list, Func<T, int> Predicate)
+        {
+            var dict = new Dictionary<int, T>();
+
+            foreach (var item in list)
+            {
+                if (!dict.ContainsKey(Predicate(item)))
+                {
+                    dict.Add(Predicate(item), item);
+                }
+            }
+
+            return dict.Values.AsEnumerable();
+        }
         public static T Aggregate<T>(this IEnumerable<T> list, Func<T, T, T> aggregateFunction)
         {
             return Aggregate<T>(list, default(T), aggregateFunction);

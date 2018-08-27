@@ -23,12 +23,14 @@
                 return new List<T>();
 
             List<T> coll = new List<T>();
+
             for (int i = 0; i < items.Length; i++)
             {
                 T val = mapFunction(items.GetValue(i));
                 if (val != null)
                     coll.Add(val);
             }
+
             return coll;
         }
 
@@ -60,7 +62,6 @@
             }
 
             return ret;
-
         }
 
         public static T[] Shuffle<T>(this T[] list)
@@ -74,6 +75,7 @@
                 list[i] = list[j];
                 list[j] = e;
             }
+
             return list;
         }
     }
