@@ -5,7 +5,9 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
-
+    /// <summary>
+    /// Linq to Memory.
+    /// </summary>
     public static class EnumerableExtensions
     {
         public static IEnumerable ClassToIEnumerable<T>(this T @object)
@@ -69,7 +71,7 @@
             return groupings.ToDictionary(group => group.Key, group => group.ToList());
         }
 
-        public static IEnumerable<T> RemoveDuplicates<T>(this ICollection<T> list, Func<T, int> Predicate)
+        public static IEnumerable<T> RemoveDuplicates<T>(this IEnumerable<T> list, Func<T, int> Predicate)
         {
             var dict = new Dictionary<int, T>();
 
@@ -83,6 +85,7 @@
 
             return dict.Values.AsEnumerable();
         }
+
         public static T Aggregate<T>(this IEnumerable<T> list, Func<T, T, T> aggregateFunction)
         {
             return Aggregate<T>(list, default(T), aggregateFunction);
@@ -93,6 +96,11 @@
         {
             return list.Count() <= 0 ?
                 defaultValue : list.Aggregate<T>(aggregateFunction);
+        }
+
+        public static IEnumerable<T> Page<T>(this IEnumerable<T> en, int pageSize, int page)
+        {
+            return en.Skip(page * pageSize).Take(pageSize);
         }
     }
 }
