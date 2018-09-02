@@ -23,6 +23,10 @@ namespace Extensions
                         {
                             csv = csv.AppendFormat($"{prop.Name}{separator}");
                         }
+                        else if (Nullable.GetUnderlyingType(prop.PropertyType) != null)
+                        {
+                            csv = csv.AppendFormat($"{prop.Name.Replace(separator, string.Empty)}{separator}");
+                        }
                         else if (typeof(IEnumerable).IsAssignableFrom(prop.PropertyType))
                         {
                             csv = csv.AppendFormat($"{prop.Name}{separator}");
