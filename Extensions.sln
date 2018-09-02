@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Extensions", "Extensions\Ex
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj", "{C66C68D1-AE6C-4C96-82F5-80E710341846}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelpersV1", "HelpersV1\HelpersV1.csproj", "{1BE41618-6E9C-4A8E-8550-159916FA69C3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{C66C68D1-AE6C-4C96-82F5-80E710341846}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C66C68D1-AE6C-4C96-82F5-80E710341846}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C66C68D1-AE6C-4C96-82F5-80E710341846}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1BE41618-6E9C-4A8E-8550-159916FA69C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1BE41618-6E9C-4A8E-8550-159916FA69C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1BE41618-6E9C-4A8E-8550-159916FA69C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1BE41618-6E9C-4A8E-8550-159916FA69C3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

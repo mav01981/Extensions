@@ -8,7 +8,7 @@ using System.Xml.Serialization;
 
 namespace Extensions
 {
-    public static class GenericExtension
+    public static class GenericExtensions
     {
         private static string FlattenModel(Type type, object @object, ref string output)
         {
@@ -111,25 +111,6 @@ namespace Extensions
             }
 
             return stringWriter.ToString();
-        }
-
-        public static List<T> EnumToList<T>(this T @object) where T : struct, IConvertible
-        {
-            Type enumType = typeof(T);
-
-            if (enumType.BaseType != typeof(Enum))
-                throw new ArgumentException("T must be of type System.Enum");
-
-            Array enumValArray = Enum.GetValues(enumType);
-
-            List<T> enumValList = new List<T>(enumValArray.Length);
-
-            foreach (int val in enumValArray)
-            {
-                enumValList.Add((T)Enum.Parse(enumType, val.ToString()));
-            }
-
-            return enumValList;
         }
     }
 }

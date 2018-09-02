@@ -1,11 +1,12 @@
 ﻿namespace Tests
 {
-    using Xunit;
     using Extensions;
+    using System.Collections.Generic;
+    using Xunit;
 
     public enum Job
     {
-        PoliceMan,
+        PoliceMan = 1,
         Salesman,
         Teacher,
         Gardener
@@ -32,6 +33,22 @@
         public void Enum_IsNot_Value()
         {
             Assert.False(Job.Gardener.Is("Test"));
+        }
+
+        [Fact]
+        public void Enum_To_IEnumerable()
+        {
+            var ienumerable = HelpersV1.Enumerations.EnumToEnumerable<Job>(typeof(Job));
+
+            Assert.True(ienumerable is IEnumerable<Job>);
+        }
+        [Fact]
+        public void Enum_To_List()
+        {
+            var list = HelpersV1.Enumerations.EnumToList<Job>(typeof(Job));
+       
+            Assert.True(list is List<Job>);
+            Assert.Equal(4, list.Count);
         }
     }
 }

@@ -102,6 +102,7 @@
         {
             return en.Skip(page * pageSize).Take(pageSize);
         }
+
         public static IEnumerable Enum(this IEnumerable @objectArray)
         {
             if (@objectArray != null)
