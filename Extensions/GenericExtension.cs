@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml;
@@ -88,20 +89,6 @@ namespace Extensions
             return output;
         }
 
-        public static IEnumerable Enum(this IEnumerable @objectArray)
-        {
-            if (@objectArray != null)
-            {
-                foreach (var t in @objectArray)
-                {
-                    yield return t;
-                }
-            }
-            else
-            {
-                yield break;
-            }
-        }
         /// <summary>
         /// 
         /// </summary>
@@ -124,6 +111,25 @@ namespace Extensions
             }
 
             return stringWriter.ToString();
+        }
+
+        public static List<T> EnumToList<T>(this T @object) where T : struct, IConvertible
+        {
+            Type enumType = typeof(T);
+
+            if (enumType.BaseType != typeof(Enum))
+                throw new ArgumentException("T must be of type System.Enum");
+
+            Array enumValArray = Enum.GetValues(enumType);
+
+            List<T> enumValList = new List<T>(enumValArray.Length);
+
+            foreach (int val in enumValArray)
+            {
+                enumValList.Add((T)Enum.Parse(enumType, val.ToString()));
+            }
+
+            return enumValList;
         }
     }
 }
