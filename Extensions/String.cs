@@ -2,6 +2,7 @@
 {
     using System;
     using System.IO;
+    using System.Xml.Serialization;
 
     public static class StringExtension
     {
@@ -21,7 +22,6 @@
         {
             return @string.Substring(number);
         }
-
         public static MemoryStream ToStream(this string str)
         {
             using (MemoryStream stream = new MemoryStream())
@@ -37,6 +37,27 @@
                 return stream;
             };
 
+        }
+
+        public static T DeserializeXMLToObject<T>(this string xml)
+        {
+            T returnObject = default(T);
+            if (string.IsNullOrEmpty(xml)) return default(T);
+
+            try
+            {
+                using (StreamReader xmlStream = new StreamReader(xml))
+                {
+                    XmlSerializer serializer = new XmlSerializer(typeof(T));
+                    returnObject = (T)serializer.Deserialize(xmlStream);
+                }
+            }
+            catch (Exception)
+            {
+                throw new Exception("XML is in incorrect format.");
+            }
+
+            return returnObject;
         }
     }
 }

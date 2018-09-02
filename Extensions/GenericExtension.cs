@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections;
+using System.IO;
 using System.Linq;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace Extensions
 {
-    public static class ObjectExtension
+    public static class GenericExtension
     {
         private static string FlattenModel(Type type, object @object, ref string output)
         {
@@ -108,6 +111,19 @@ namespace Extensions
         public static string[] PropertiesToStringArray<T>(this T @object)
         {
             return @object.GetType().GetProperties().Select(s => s.GetValue(@object).ToString()).ToArray();
+        }
+
+        public static string SerializeObjectToXML<T>(this T value) where T : class
+        {
+            XmlSerializer xmlserializer = new XmlSerializer(typeof(T));
+            StringWriter stringWriter = new StringWriter();
+
+            using (XmlWriter writer = XmlWriter.Create(stringWriter))
+            {
+                xmlserializer.Serialize(writer, value);
+            }
+
+            return stringWriter.ToString();
         }
     }
 }
