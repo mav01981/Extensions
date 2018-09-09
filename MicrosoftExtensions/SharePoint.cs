@@ -2,6 +2,7 @@
 {
     using Microsoft.SharePoint.Client;
     using System;
+    using System.Linq;
 
     public static class SharePointExtensions
     {
@@ -49,6 +50,25 @@
         public static void DeletFolder(this ClientContext context, string folder)
         {
             context.Web.GetFileByServerRelativeUrl(folder).DeleteObject();
+            context.ExecuteQuery();
+        }
+
+        public static void DeleteAllFiles(this ClientContext context, string folderRelativeUrl)
+        {
+            var folder = context.Web.GetFolderByServerRelativeUrl(folderRelativeUrl);
+            context.Load(folder.Files);
+            context.ExecuteQuery();
+            folder.Files.ToList().ForEach(file => file.DeleteObject());
+            context.ExecuteQuery();
+        }
+
+        public static void DeleteAllFiles(this ClientContext context, string folderRelativeUrl, string search)
+        {
+            var folder = context.Web.GetFolderByServerRelativeUrl(folderRelativeUrl);
+            context.Load(folder.Files);
+            context.ExecuteQuery();
+            folder.Files.Where(x => x.Name.Contains(search))
+                .ToList().ForEach(file => file.DeleteObject());
             context.ExecuteQuery();
         }
     }
