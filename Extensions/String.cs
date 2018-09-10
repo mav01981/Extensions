@@ -74,7 +74,7 @@
                 return value.Replace(file.First(), "").Replace(" ", "") + $".{file.First()}";
             }
 
-            return string.Empty;
+            return value;
         }
     }
 }
