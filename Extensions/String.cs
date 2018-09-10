@@ -2,6 +2,7 @@
 {
     using System;
     using System.IO;
+    using System.Linq;
     using System.Xml.Serialization;
 
     public static class StringExtension
@@ -38,7 +39,6 @@
             };
 
         }
-
         public static T DeserializeXMLToObject<T>(this string xml)
         {
             T returnObject = default(T);
@@ -58,6 +58,23 @@
             }
 
             return returnObject;
+        }
+        public static string RemoveInvalidSaveCharacters(this string value)
+        {
+            string[] fileExtensions = { "zip", "txt", "xls", "xlsx", "doc", "docx", "jpg", "png" };
+            char[] illegal = { '*', '.', '/', '\\', ';', ':', '?', '|', '=', ',', '<', '>' };
+
+            var file = fileExtensions.Where(x => value.Contains(x)).ToList();
+
+            if (file.Count() > 0)
+            {
+                illegal
+                    .ToList().ForEach(x => value = value.Replace(x, ' ').Trim());
+
+                return value.Replace(file.First(), "").Replace(" ", "") + $".{file.First()}";
+            }
+
+            return string.Empty;
         }
     }
 }
